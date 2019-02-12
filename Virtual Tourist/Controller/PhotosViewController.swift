@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import MapKit
 
-class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MKMapViewDelegate {
   
     @IBOutlet weak var mapSnapshot: MKMapView!
     @IBOutlet weak var photoCollectionView: UICollectionView!
@@ -20,7 +20,9 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        mapSnapshot.delegate = self
         mapSnapshot.isUserInteractionEnabled = false
+        mapSnapshot.register(MKPinAnnotationView.self, forAnnotationViewWithReuseIdentifier: "sspin")
         
         print(latitude)
         print(longitude)
@@ -30,8 +32,37 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         let region = MKCoordinateRegion(center: location, span: span)
         mapSnapshot.setRegion(region, animated: false)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = location
+        mapSnapshot.addAnnotation(annotation)
+        
     }
     
+}
+extension PhotosViewController {
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        var pinView: MKPinAnnotationView!
+        let reuseId = "sspin"
+        
+        pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId, for: annotation) as? MKPinAnnotationView
+        
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.canShowCallout = false
+            pinView!.animatesDrop = true
+            pinView!.pinTintColor = .green
+        }else{
+            pinView!.annotation = annotation
+            pinView!.canShowCallout = false
+            pinView!.animatesDrop = true
+            pinView!.pinTintColor = .green
+        }
+        
+        return pinView
+    }
 }
 
 extension PhotosViewController  {

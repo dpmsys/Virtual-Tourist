@@ -100,33 +100,17 @@ class MapViewController:  UIViewController, MKMapViewDelegate, UIGestureRecogniz
         
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-        //    pinView!.canShowCallout = true
-            pinView!.pinTintColor = .red
-         //   pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-            
+            pinView!.canShowCallout = false
+            pinView!.animatesDrop = true
+            pinView!.pinTintColor = .green
         }else{
-        //    pinView!.canShowCallout = true
             pinView!.annotation = annotation
-        //    pinView!.pinTintColor = .red
-        //    pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+            pinView!.canShowCallout = false
+            pinView!.animatesDrop = true
+            pinView!.pinTintColor = .green
         }
         
         return pinView
     }
-    
-    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        
-        if control == view.rightCalloutAccessoryView {
-            let app = UIApplication.shared
-            if let toOpen = view.annotation?.subtitle! {
-                app.open(URL(string:toOpen)!,options: [ : ], completionHandler: { (success) in
-                    if (!success) {
-                        self.errorAlert(message: "Invalid URL: \(toOpen)")
-                    }
-                })
-            }
-        }
-    }
-
 }
 
