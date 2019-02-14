@@ -38,8 +38,22 @@ extension FlickrClient {
                             let url3 = "_" + (photo["secret"] as! String) + ".jpg"
                             
                             let url = url1 + url2 + url3
-                                print (url)
-                                print (photo["title"] as! String)
+                            print (url)
+                            print (photo["title"] as! String)
+                            
+                            var photoData = PhotoInfo(userDict: photo)
+                            
+                            self.downloadImage(url: photoData.url) { (image, error) in
+                                if (error != nil) {
+                                    print ("error from download image")
+                                }else{
+                                    photoData.image = image
+                                }
+                            }
+                            
+                            photoAlbum.append(photoData)
+                            
+
                         }
                     }
                     completionHandlerForGetPhotos(true, nil)
@@ -50,7 +64,37 @@ extension FlickrClient {
         }
     }
 
-    func downloadImage(url: String, _ completionHandlerForGetPhotos: @escaping (_ success: Bool, _ errorString: String?) -> Void) {
+    func downloadImage(url: String, _ completionHandlerForGetPhotos: @escaping (_ image: UIImage, _ error: NSError?) -> Void) {
+        
+        let url1 = URL(string: url)
+        let imageRequest = URLRequest(url: url1!)
+            
+        print(imageRequest.url)
+        
+        let task = session.dataTask(with: imageRequest as URLRequest) { (data, response, error) in
+            guard (error == nil) else {
+                print ("error")
+                 return
+            }
+            
+            print ((response as? HTTPURLResponse)?.statusCode)
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
+                print ((response as? HTTPURLResponse)?.statusCode)
+                return
+            }
+            
+            guard let data = data else {
+                print ("no data")
+                return
+            }
+            print("calling convert")
+            let string1 = String(data: data, encoding: String.Encoding.utf8) ?? "Data could not be printed"
+            print(string1)
+            print(data)
+            completionHandlerForGetPhotos(UIImage(data: data)!,nil)
+         }
+        
+        task.resume()
         
     }
 }

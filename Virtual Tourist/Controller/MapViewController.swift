@@ -147,12 +147,12 @@ extension MapViewController {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = false
             pinView!.animatesDrop = true
-            pinView!.pinTintColor = .green
+            pinView!.pinTintColor = .red
         }else{
             pinView!.annotation = annotation
             pinView!.canShowCallout = false
             pinView!.animatesDrop = true
-            pinView!.pinTintColor = .green
+            pinView!.pinTintColor = .red
         }
         
         return pinView

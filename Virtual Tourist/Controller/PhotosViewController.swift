@@ -35,7 +35,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         FlickrClient.sharedInstance().getPhotos(coordinate: location) { (success, errorString) in
             if (success) {
-            
+                print(success)
             }else{
                 print(errorString)
             }
@@ -59,12 +59,12 @@ extension PhotosViewController {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = false
             pinView!.animatesDrop = true
-            pinView!.pinTintColor = .green
+            pinView!.pinTintColor = .red
         }else{
             pinView!.annotation = annotation
             pinView!.canShowCallout = false
             pinView!.animatesDrop = true
-            pinView!.pinTintColor = .green
+            pinView!.pinTintColor = .red
         }
         
         return pinView
