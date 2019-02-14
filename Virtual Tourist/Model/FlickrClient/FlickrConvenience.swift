@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import CoreData
 
 extension FlickrClient {
     
@@ -29,8 +30,8 @@ extension FlickrClient {
             if error != nil {
                 completionHandlerForGetPhotos(false, "Get photos failed")
             } else {
-                if let photos = results?[FlickrClient.JSONResponseKeys.Photos] as! Dictionary<String, Any>? {
-                    if let photoArray = photos["photo"] as! [Dictionary<String, Any>]? {
+                if let flickrPhotos = results?[FlickrClient.JSONResponseKeys.Photos] as! Dictionary<String, Any>? {
+                    if let photoArray = flickrPhotos["photo"] as! [Dictionary<String, Any>]? {
                         for photo in photoArray {
                             let url1 = "https://farm" + String(photo["farm"] as! Int) + ".staticflickr.com/"
                             let url2 = (photo["server"] as! String) + "/" + (photo["id"] as! String)
@@ -39,7 +40,6 @@ extension FlickrClient {
                             let url = url1 + url2 + url3
                                 print (url)
                                 print (photo["title"] as! String)
-                            
                         }
                     }
                     completionHandlerForGetPhotos(true, nil)
@@ -50,4 +50,7 @@ extension FlickrClient {
         }
     }
 
+    func downloadImage(url: String, _ completionHandlerForGetPhotos: @escaping (_ success: Bool, _ errorString: String?) -> Void) {
+        
+    }
 }

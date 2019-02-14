@@ -24,12 +24,8 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
         mapSnapshot.isUserInteractionEnabled = false
         mapSnapshot.register(MKPinAnnotationView.self, forAnnotationViewWithReuseIdentifier: "sspin")
         
-        print(latitude)
-        print(longitude)
-        let span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-        
+        let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
         let location = CLLocationCoordinate2DMake(latitude, longitude)
-        
         let region = MKCoordinateRegion(center: location, span: span)
         mapSnapshot.setRegion(region, animated: false)
         
@@ -37,9 +33,19 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
         annotation.coordinate = location
         mapSnapshot.addAnnotation(annotation)
         
+        FlickrClient.sharedInstance().getPhotos(coordinate: location) { (success, errorString) in
+            if (success) {
+            
+            }else{
+                print(errorString)
+            }
+        }
+        
+        
     }
     
 }
+
 extension PhotosViewController {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {

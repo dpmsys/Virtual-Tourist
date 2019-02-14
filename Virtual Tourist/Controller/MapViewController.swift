@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import CoreLocation
 import MapKit
 
 class MapViewController:  UIViewController, MKMapViewDelegate, UIGestureRecognizerDelegate, NSFetchedResultsControllerDelegate {
@@ -38,22 +39,41 @@ class MapViewController:  UIViewController, MKMapViewDelegate, UIGestureRecogniz
     override func viewDidLoad() {
         super.viewDidLoad()
         tourMap.register(MKPinAnnotationView.self, forAnnotationViewWithReuseIdentifier: "pin")
-        setupFetchedResultsController()
-        
- //       let clickRecognizer = UITapGestureRecognizer(target: self, action: #selector(onMapClicked))
-  //      clickRecognizer.delegate = self
- //       tourMap.addGestureRecognizer(clickRecognizer)
+ //       setupFetchedResultsController()
         
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(onMapLongPressed))
         longPressRecognizer.delegate = self
         tourMap.addGestureRecognizer(longPressRecognizer)
         
+        let fetchRequest:NSFetchRequest<Location> = Location.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "latitude", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
         
+        if let result = try? dataController.viewContext.fetch(fetchRequest) {
+            locations = result
+        }
+        
+        for location in locations {
+            let annotation = MKPointAnnotation()
+            annotation.coordinate.latitude = location.latitude
+            annotation.coordinate.longitude = location.longitude
+            tourMap.addAnnotation(annotation)
+        }
+        
+        // if we've save a map view before restore it
+        
+        if UserDefaults.standard.value(forKey: "mapCenterLat") != nil {
+            var center = CLLocationCoordinate2D()
+            center.latitude = UserDefaults.standard.value(forKey: "mapCenterLat") as! CLLocationDegrees
+            center.longitude = UserDefaults.standard.value(forKey: "mapCenterLong") as! CLLocationDegrees
+            
+            var span = MKCoordinateSpan()
+            span.latitudeDelta = UserDefaults.standard.value(forKey: "mapLatDelta") as! CLLocationDegrees
+            span.longitudeDelta = UserDefaults.standard.value(forKey: "mapLongDelta") as! CLLocationDegrees
+            let region = MKCoordinateRegion(center: center, span: span)
+            tourMap.setRegion(region, animated: true)
+        }
     }
-    
-//    @objc func onMapClicked() {
-//        print("map tapped")
-//    }
 
     @objc func onMapLongPressed (_ sender: UIGestureRecognizer) {
         if sender.state == .ended {
@@ -67,6 +87,11 @@ class MapViewController:  UIViewController, MKMapViewDelegate, UIGestureRecogniz
             annotation.coordinate = locCoordinate
             annotations.append(annotation)
             tourMap.addAnnotation(annotation)
+
+            let location = Location(context: dataController.viewContext)
+            location.latitude = locCoordinate.latitude
+            location.longitude = locCoordinate.longitude
+            try! dataController.viewContext.save()
             
  //           FlickrClient.sharedInstance().getPhotos(coordinate: locCoordinate) { (success, errorString) in
   //              if (success) {
@@ -78,7 +103,27 @@ class MapViewController:  UIViewController, MKMapViewDelegate, UIGestureRecogniz
             return
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    
+    }
 
+    func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+        
+        // save view to user defaults
+        
+        UserDefaults.standard.set(mapView.region.center.latitude, forKey: "mapCenterLat")
+        UserDefaults.standard.set(mapView.region.center.longitude, forKey: "mapCenterLong")
+        UserDefaults.standard.set(mapView.region.span.latitudeDelta, forKey: "mapLatDelta")
+        UserDefaults.standard.set(mapView.region.span.longitudeDelta, forKey: "mapLongDelta")
+        UserDefaults.standard.set(mapView.camera.altitude, forKey: "mapAltitude")
+    }
+}
+
+
+
+extension MapViewController {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         
         var photosVC = PhotosViewController()

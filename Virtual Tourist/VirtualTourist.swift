@@ -10,6 +10,7 @@ import Foundation
 import MapKit
 
 var annotations = [MKPointAnnotation] ()
+var locations = [Location] ()
 
 struct PhotoInfo {
     var id: String = ""
@@ -19,6 +20,10 @@ struct PhotoInfo {
     var title: String = ""
     var url: String = ""
     var image: UIImage?
+    
+    init (){
+        
+    }
 }
 
 var photoAlbum: [PhotoInfo] = []
