@@ -15,12 +15,32 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
     @IBOutlet weak var mapSnapshot: MKMapView!
     @IBOutlet weak var photoCollectionView: UICollectionView!
     
+    @IBAction func refresh(_ sender: Any) {
+        self.photoCollectionView.reloadData()
+    }
+    
     var latitude:  Double!
     var longitude: Double!
     
+    let cellID = "PhotoCell"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         mapSnapshot.delegate = self
+        
+        let layout = self.photoCollectionView!.collectionViewLayout as! UICollectionViewFlowLayout
+    //    layout.sectionInset = UIEdgeInsets(top: 1,left: 1,bottom: 1,right: 1)
+    //    layout.headerReferenceSize = CGSize(width: 70, height: 45)
+     //   layout.itemSize = CGSize(width: 100, height: 100)
+        photoCollectionView?.contentMode = .scaleAspectFit
+        
+  //      self.photoCollectionView.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCell")
+        
+        photoCollectionView.isHidden = false
+        photoCollectionView.delegate = self
+        photoCollectionView.dataSource = self
+        
         mapSnapshot.isUserInteractionEnabled = false
         mapSnapshot.register(MKPinAnnotationView.self, forAnnotationViewWithReuseIdentifier: "sspin")
         
@@ -35,7 +55,9 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         FlickrClient.sharedInstance().getPhotos(coordinate: location) { (success, errorString) in
             if (success) {
-                print(success)
+                performUIUpdatesOnMain () {
+                    self.photoCollectionView.reloadData()
+                }
             }else{
                 print(errorString)
             }
@@ -72,17 +94,20 @@ extension PhotosViewController {
 }
 
 extension PhotosViewController  {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return photoAlbum.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let CellID = "PhotoCollectionCell"
+        let CellID = "PhotoCell"
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellID, for: indexPath) as! PhotoCollectionViewCell
         
         let photo = photoAlbum[(indexPath as NSIndexPath).row]
+
         cell.photoImageView?.image = photo.image
+        cell.isHidden = false
         
         return cell
     }
