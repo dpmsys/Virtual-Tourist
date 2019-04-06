@@ -39,6 +39,9 @@ extension FlickrClient {
 
     struct JSONResponseKeys {
         static let Photos = "photos"
+        static let Pages = "pages"
+        static let Total = "total"
+        static let Photo = "photo"
         static let Id = "id"
         static let Secret = "secret"
         static let Farm = "farm"

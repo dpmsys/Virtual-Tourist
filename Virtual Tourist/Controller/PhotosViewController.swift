@@ -17,6 +17,21 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     @IBAction func refresh(_ sender: Any) {
         self.photoCollectionView.reloadData()
+        (sender as! UIRefreshControl).endRefreshing()   
+    }
+    
+    @IBAction func newCollection(_ sender: Any) {
+        
+        let location = CLLocationCoordinate2DMake(latitude, longitude)
+        FlickrClient.sharedInstance().getPhotos(coordinate: location) { (success, errorString) in
+            if (success) {
+                performUIUpdatesOnMain () {
+                    self.photoCollectionView.reloadData()
+                }
+            }else{
+                print(errorString ?? "Empty error string")
+            }
+        }
     }
     
     var latitude:  Double!
@@ -29,7 +44,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         mapSnapshot.delegate = self
         
-        let layout = self.photoCollectionView!.collectionViewLayout as! UICollectionViewFlowLayout
+    //    let layout = self.photoCollectionView!.collectionViewLayout as! UICollectionViewFlowLayout
     //    layout.sectionInset = UIEdgeInsets(top: 1,left: 1,bottom: 1,right: 1)
     //    layout.headerReferenceSize = CGSize(width: 70, height: 45)
      //   layout.itemSize = CGSize(width: 100, height: 100)
@@ -40,6 +55,8 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
         photoCollectionView.isHidden = false
         photoCollectionView.delegate = self
         photoCollectionView.dataSource = self
+        photoCollectionView.refreshControl = UIRefreshControl()
+        photoCollectionView.refreshControl!.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
         mapSnapshot.isUserInteractionEnabled = false
         mapSnapshot.register(MKPinAnnotationView.self, forAnnotationViewWithReuseIdentifier: "sspin")
@@ -53,13 +70,15 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
         annotation.coordinate = location
         mapSnapshot.addAnnotation(annotation)
         
+        self.photoCollectionView.reloadData()
+        
         FlickrClient.sharedInstance().getPhotos(coordinate: location) { (success, errorString) in
             if (success) {
                 performUIUpdatesOnMain () {
                     self.photoCollectionView.reloadData()
                 }
             }else{
-                print(errorString)
+                print(errorString ?? "Empty error string")
             }
         }
         
@@ -106,9 +125,14 @@ extension PhotosViewController  {
         
         let photo = photoAlbum[(indexPath as NSIndexPath).row]
 
-        cell.photoImageView?.image = photo.image
-        cell.isHidden = false
-        
+        if (photo.image == nil) {
+            spinner?.show(v: cell.photoImageView as UIView)
+            
+        }else{
+
+            cell.photoImageView?.image = photo.image
+            cell.isHidden = false
+        }
         return cell
     }
     

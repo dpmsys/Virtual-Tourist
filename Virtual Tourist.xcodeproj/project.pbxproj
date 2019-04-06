@@ -15,6 +15,7 @@
 		0605FF61220D1D5F0080A7F4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0605FF5F220D1D5F0080A7F4 /* LaunchScreen.storyboard */; };
 		0605FF6C220D1D600080A7F4 /* Virtual_TouristTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0605FF6B220D1D600080A7F4 /* Virtual_TouristTests.swift */; };
 		0605FF77220D1D600080A7F4 /* Virtual_TouristUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0605FF76220D1D600080A7F4 /* Virtual_TouristUITests.swift */; };
+		0610B01C22249E03004565D4 /* Spinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0610B01B22249E03004565D4 /* Spinner.swift */; };
 		061BD447220FC30A00CF3A77 /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 061BD446220FC30A00CF3A77 /* PhotosViewController.swift */; };
 		06CE5BC6220E886C00FC8856 /* ErrorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CE5BC5220E886C00FC8856 /* ErrorAlert.swift */; };
 		06CE5BC8220E88BC00FC8856 /* GCDBlackBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CE5BC7220E88BC00FC8856 /* GCDBlackBox.swift */; };
@@ -60,6 +61,7 @@
 		0605FF72220D1D600080A7F4 /* Virtual TouristUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Virtual TouristUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0605FF76220D1D600080A7F4 /* Virtual_TouristUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Virtual_TouristUITests.swift; sourceTree = "<group>"; };
 		0605FF78220D1D600080A7F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0610B01B22249E03004565D4 /* Spinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spinner.swift; sourceTree = "<group>"; };
 		061BD446220FC30A00CF3A77 /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
 		06CE5BC5220E886C00FC8856 /* ErrorAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAlert.swift; sourceTree = "<group>"; };
 		06CE5BC7220E88BC00FC8856 /* GCDBlackBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDBlackBox.swift; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				06CE5BC5220E886C00FC8856 /* ErrorAlert.swift */,
+				0610B01B22249E03004565D4 /* Spinner.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -269,13 +272,16 @@
 				TargetAttributes = {
 					0605FF4F220D1D5D0080A7F4 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1020;
 					};
 					0605FF66220D1D600080A7F4 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1020;
 						TestTargetID = 0605FF4F220D1D5D0080A7F4;
 					};
 					0605FF71220D1D600080A7F4 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1020;
 						TestTargetID = 0605FF4F220D1D5D0080A7F4;
 					};
 				};
@@ -336,6 +342,7 @@
 				06FFF16C2210D78700C88592 /* Photo+Extra.swift in Sources */,
 				06CE5BCA220E949900FC8856 /* VirtualTourist.swift in Sources */,
 				06CE5BD1220EA1F700FC8856 /* FlickrConstants.swift in Sources */,
+				0610B01C22249E03004565D4 /* Spinner.swift in Sources */,
 				0605FF56220D1D5E0080A7F4 /* MapViewController.swift in Sources */,
 				06CE5BCF220EA1C100FC8856 /* FlickrConvenience.swift in Sources */,
 				06CE5BC6220E886C00FC8856 /* ErrorAlert.swift in Sources */,
@@ -529,7 +536,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mulvihill.dave.Virtual-Tourist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -547,7 +554,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mulvihill.dave.Virtual-Tourist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -567,7 +574,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mulvihill.dave.Virtual-TouristTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Virtual Tourist.app/Virtual Tourist";
 			};
@@ -588,7 +595,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mulvihill.dave.Virtual-TouristTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Virtual Tourist.app/Virtual Tourist";
 			};
@@ -608,7 +615,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mulvihill.dave.Virtual-TouristUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Virtual Tourist";
 			};
@@ -628,7 +635,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mulvihill.dave.Virtual-TouristUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Virtual Tourist";
 			};

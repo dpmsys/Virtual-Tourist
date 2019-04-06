@@ -11,6 +11,7 @@ import MapKit
 
 var annotations = [MKPointAnnotation] ()
 var locations = [Location] ()
+var spinner: SpinnerViewController?
 
 struct PhotoInfo {
     var id: String = ""

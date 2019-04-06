@@ -16,12 +16,14 @@ extension FlickrClient {
         
         var parameters = [String:AnyObject] ()
         
+        photoAlbum.removeAll()
+        
         parameters[FlickrClient.ParameterKeys.APIKey] = FlickrClient.Constants.APIKey as AnyObject
         parameters[FlickrClient.ParameterKeys.Format] = FlickrClient.Constants.Format as AnyObject
         parameters[FlickrClient.ParameterKeys.Latitude] = coordinate.latitude as AnyObject
         parameters[FlickrClient.ParameterKeys.Longitude] = coordinate.longitude as AnyObject
         parameters[FlickrClient.ParameterKeys.Radius] = FlickrClient.Constants.SearchRadius as AnyObject
-        parameters[FlickrClient.ParameterKeys.PerPage] = 21 as AnyObject
+        parameters[FlickrClient.ParameterKeys.PerPage] = 100 as AnyObject
         
         let urlstr: String = FlickrClient.Methods.Search
         
@@ -31,13 +33,17 @@ extension FlickrClient {
                 completionHandlerForGetPhotos(false, "Get photos failed")
             } else {
                 if let flickrPhotos = results?[FlickrClient.JSONResponseKeys.Photos] as! Dictionary<String, Any>? {
-                    if let photoArray = flickrPhotos["photo"] as! [Dictionary<String, Any>]? {
+                    if let photoCnt =  flickrPhotos[FlickrClient.JSONResponseKeys.Total], let pages = flickrPhotos[FlickrClient.JSONResponseKeys.Pages] {
+                        print (photoCnt, pages)
+                    }
+                    
+                    if let photoArray = (flickrPhotos["photo"] as! [Dictionary<String, Any>]?)?.prefix(21) {
                         for photo in photoArray {
-                            let url1 = "https://farm" + String(photo["farm"] as! Int) + ".staticflickr.com/"
-                            let url2 = (photo["server"] as! String) + "/" + (photo["id"] as! String)
-                            let url3 = "_" + (photo["secret"] as! String) + ".jpg"
-                            
-                            let url = url1 + url2 + url3
+//                            let url1 = "https://farm" + String(photo["farm"] as! Int) + ".staticflickr.com/"
+//                            let url2 = (photo["server"] as! String) + "/" + (photo["id"] as! String)
+//                            let url3 = "_" + (photo["secret"] as! String) + ".jpg"
+//
+//                            let url = url1 + url2 + url3
   //                        print (url)
   //                          print (photo["title"] as! String)
                             
@@ -50,11 +56,12 @@ extension FlickrClient {
                                     print(photoData.url)
                                     photoData.image = image
                                     photoAlbum.append(photoData)
+                                    completionHandlerForGetPhotos(true, nil)
                                 }
                             }
                         }
                     }
-                    completionHandlerForGetPhotos(true, nil)
+                    
                 } else {
                     completionHandlerForGetPhotos(false, error.debugDescription)
                 }
@@ -77,7 +84,7 @@ extension FlickrClient {
             
    //         print ((response as? HTTPURLResponse)?.statusCode)
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                print ((response as? HTTPURLResponse)?.statusCode)
+                print ((response as? HTTPURLResponse)?.statusCode ?? "No status")
                 return
             }
             

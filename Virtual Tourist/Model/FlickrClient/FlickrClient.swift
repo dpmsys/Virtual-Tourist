@@ -31,9 +31,9 @@ class FlickrClient : NSObject {
                 return
             }
             
-            print ((response as? HTTPURLResponse)?.statusCode)
+            print ((response as? HTTPURLResponse)?.statusCode ?? "Empty status code")
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                print ((response as? HTTPURLResponse)?.statusCode)
+                print ((response as? HTTPURLResponse)?.statusCode ?? "Empty status code")
                 completionHandlerForGET("Failed GET method" as AnyObject, NSError(domain: "Server returned status other than 2xx! - \((response as? HTTPURLResponse)?.statusCode ?? 10000)", code: 1 , userInfo: nil))
                 return
             }

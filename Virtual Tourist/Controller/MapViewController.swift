@@ -38,6 +38,9 @@ class MapViewController:  UIViewController, MKMapViewDelegate, UIGestureRecogniz
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        spinner = SpinnerViewController()
+        
         tourMap.register(MKPinAnnotationView.self, forAnnotationViewWithReuseIdentifier: "pin")
  //       setupFetchedResultsController()
         
@@ -132,8 +135,9 @@ extension MapViewController {
         photosVC = self.storyboard?.instantiateViewController(withIdentifier: "PhotosViewController") as! PhotosViewController
         photosVC.latitude = view.annotation?.coordinate.latitude
         photosVC.longitude = view.annotation?.coordinate.longitude
-        self.present(photosVC, animated: true, completion: nil)
-        
+    
+ //       self.present(photosVC, animated: true, completion: nil)
+        self.navigationController!.pushViewController(photosVC, animated: true)
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
